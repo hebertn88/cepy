@@ -28,7 +28,7 @@ get_cep = CepRange.get().last_cep
 if get_cep < CEP_MIN:
     get_cep = CEP_MIN
 
-print('Iniciando consultas!\n')
+print('Iniciando consultas!')
   
 while get_cep <= CEP_MAX:
     URL = base_url + str(get_cep) + response_format
