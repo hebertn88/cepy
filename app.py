@@ -5,7 +5,7 @@ import requests
 from unidecode import unidecode
 
 from models import Cep, CepRange, create_tables
-from settings import CEP_MIN, CEP_MAX, DATABASE_FILE
+from settings import *
 
 
 if not (os.path.isfile(DATABASE_FILE)):
@@ -27,6 +27,8 @@ response_format = "/json/"
 get_cep = CepRange.get().last_cep
 if get_cep < CEP_MIN:
     get_cep = CEP_MIN
+else:
+    get_cep += 1
 
 print('Iniciando consultas!')
   
@@ -89,11 +91,14 @@ while get_cep <= CEP_MAX:
         cep_range = CepRange.get()
         cep_range.last_cep = cep
         cep_range.save()
-    
+
         print(f'{Cep.get(cep = cep).cep}... OK!')
-        sleep(randint(0,4))
+        
+        sleep(randint(SLEEP_MIN, SLEEP_MAX))
+        
     elif erro and status_code == 200:
         print(f'{get_cep}... CEP não encontrado.')
+        sleep(randint(1,5))
     else:
         print('Erro inesperado, tente novamente')
         break
