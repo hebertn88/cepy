@@ -1,10 +1,16 @@
-DATABASE_FILE = 'data.db'
+DATABASE_FILE = 'data_avanhandava.db'
+LOG_FILE = 'log_avanhandava.txt'
 
 CEP_MIN = 16300001
 CEP_MAX = 16309999
 
-SLEEP_MIN = 5
-SLEEP_MAX = 25
+# penapolis - 16300-001 a 16309-999
+# avanhandava - 16360-000 a 16369-999
+# aracatuba - 16000-001 a 16129-999
+
+SLEEP_MIN = 1
+SLEEP_MAX = 5
+
 
 if __name__ == '__main__':
     from models import *
@@ -14,6 +20,9 @@ if __name__ == '__main__':
     
     print_title('BATABASE NAME')
     print_body(f"DATABASE_FILE = {DATABASE_FILE}")
+    
+    print_title('LOG FILE NAME')
+    print_body(f"LOG_FILE = {LOG_FILE}")
     
     print_title('CEP RANGE')
     cep_range = CepRange.get()

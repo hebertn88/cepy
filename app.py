@@ -6,6 +6,7 @@ from unidecode import unidecode
 
 from models import Cep, CepRange, create_tables
 from settings import *
+from utils import log_register
 
 
 if not (os.path.isfile(DATABASE_FILE)):
@@ -30,14 +31,14 @@ if get_cep < CEP_MIN:
 else:
     get_cep += 1
 
-print('Iniciando consultas!')
+log_register('Iniciando consultas!')
   
 while get_cep <= CEP_MAX:
     URL = base_url + str(get_cep) + response_format
     try:
         r = requests.get(url = URL)
     except Exception as e:
-        print('Erro ao realizar consulta API!')
+        log_register('Erro ao realizar consulta API!')
         break
     
     # extrai resposta
@@ -87,23 +88,22 @@ while get_cep <= CEP_MAX:
             siafi = siafi
         )
         
-        # atualiza ultimo cep consultado
-        cep_range = CepRange.get()
-        cep_range.last_cep = cep
-        cep_range.save()
-
-        print(f'{Cep.get(cep = cep).cep}... OK!')
-        
-        sleep(randint(SLEEP_MIN, SLEEP_MAX))
+        log_register(f'{Cep.get(cep = cep).cep} - OK!')
         
     elif erro and status_code == 200:
-        print(f'{get_cep}... CEP não encontrado.')
-        sleep(randint(1,5))
+        log_register(f'{get_cep} - CEP não encontrado.')
     else:
-        print('Erro inesperado, tente novamente')
+        log_register('Erro inesperado, tente novamente')
         break
+    
+    sleep(randint(SLEEP_MIN, SLEEP_MAX))
+
+    # atualiza ultimo cep consultado
+    cep_range = CepRange.get()
+    cep_range.last_cep = get_cep
+    cep_range.save()
 
     get_cep += 1
     
-print('Fim das consultas!')
+log_register('Fim das consultas!')
     

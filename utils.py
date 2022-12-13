@@ -1,8 +1,9 @@
 from datetime import datetime
 from time import sleep
 
+from settings import LOG_FILE
 
-def print_title(msg, width = 40, sleep_time = 0.5):
+def print_title(msg, width = 40, sleep_time = 0.3):
     print('-' * width)
     print(msg.center(width))
     print('-' * width)
@@ -15,24 +16,14 @@ def print_body(*msgs, width = 40, sleep_time = 1):
     print('-' * width)
     sleep(sleep_time)
     print()
-    
-'''
-class TimeControl:
-    def __init__(self):
-        self.time = self.get_time_now()
-        self.hour = self.time.hour
-        self.minute = self.time.minute
-        self.second = self.time.second
-        
-    def __repr__(self):
-        return(f'Time = {self.time}')
-        
-    def set_time(self, time):
-        self.time = time
-        self.hour = time.hour
-        self.minute = time.minute
-        self.second = time.second
 
-    def get_time_now():
-        return datetime.now()
-'''
+
+def log_register(msg):
+    with open(LOG_FILE, 'a', encoding='utf-8') as f:
+        time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        msg = f'{time_now} - {msg}'
+        
+        print(msg)
+        f.write(f'{msg}\n')
+        
+          
